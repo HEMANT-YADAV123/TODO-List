@@ -1,7 +1,7 @@
 import './App.css';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import {useRef, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 function App() {
 
   // Notification function.
@@ -65,6 +65,9 @@ function App() {
     )
   })
 
+  useEffect(() => {
+    document.title = "Taskify"; 
+  }, []); 
   return (
     <div className="App">
       <NotificationContainer/>
