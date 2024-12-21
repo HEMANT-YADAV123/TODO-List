@@ -1,7 +1,7 @@
 import './App.css';
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 function App() {
 
   // Notification function.
@@ -27,10 +27,18 @@ function App() {
   }
   //state handling
   let [todoList,settodoList] = useState([]);
+  const inputRef = useRef(null);//useRef is like a hook that lets you directly access or store a DOM element or a value without re-rendering the component when it changes.
+  //useState causes the component to re-render when the state changes.
+  //useRef does not trigger re-renders when its value changes.
 
   let saveToDoList = (event)=>{
+      event.preventDefault();//it is used to prevent the form to everytime gets refershed when something is saved or entered.
   
       let todoName = event.target.todoName.value; //target is form so inside form go to todoName and picks its value.
+      if (todoName.trim() === '') {
+        createNotification('error', 'Task cannot be empty')();
+        return;
+      }
       if(!todoList.includes(todoName))//repeatation is not allowed of inputs.
       {
         let finalDolist = [...todoList,todoName]//pahale vale elements + new element
@@ -41,7 +49,8 @@ function App() {
       {
         createNotification('info')();
       }
-      event.preventDefault();//it is used to prevent the form to everytime gets refershed when something is saved or entered.
+      inputRef.current.value = '';//clear the input value.
+      
   }
   // Remove item from the list
   let removeToDoItem = (index,value) => {
@@ -61,7 +70,7 @@ function App() {
       <NotificationContainer/>
       <h1>ToDo List</h1>
       <form onSubmit={saveToDoList}>
-        <input type="text" name='todoName'/><button>save</button>
+        <input type="text" name='todoName' ref={inputRef}/><button>save</button>
       </form>
 
       <div className='outerDiv'>
